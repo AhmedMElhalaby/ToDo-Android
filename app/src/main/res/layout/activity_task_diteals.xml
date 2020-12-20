@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_500"
+    tools:context=".Ui.Activities.TaskDitealsActivity">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/toolbar" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_card">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edittext_title"
+                        android:theme="@style/editTextWhiteStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:hint="@string/title"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:gravity="start|center_vertical"
+                        android:layout_toStartOf="@id/text_category"
+                        android:minHeight="48dp"
+                        android:enabled="false"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_btn_primary"
+                        android:text="@string/app_name"
+                        style="@style/TextViewNormal"
+                        android:textSize="13sp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:backgroundTint="@color/teal_700" />
+                </RelativeLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/text_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="start"
+                    android:gravity="start"
+                    style="@style/TextViewPrimary"
+                    android:textColor="@color/greyLight"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginEnd="48dp"
+                    android:background="@color/greyLight" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextViewPrimary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:gravity="start"
+                        android:text="@string/Descrption"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/greyLight"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edittext_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:enabled="false"
+                        android:hint="@string/Descrption"
+                        android:inputType="textMultiLine"
+                        android:minHeight="48dp"
+                        android:layout_gravity="top|start"
+                        android:gravity="top|start"
+                        android:theme="@style/editTextWhiteStyle" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

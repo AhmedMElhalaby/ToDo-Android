@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1076821260981",
+    "project_id": "things-todo-13b3b",
+    "storage_bucket": "things-todo-13b3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076821260981:android:d6115099dac92d260c5cfc",
+        "android_client_info": {
+          "package_name": "halabiy.com.thingstodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076821260981-mkm407fjkm92hgria5ipguqgm4v11sa6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-Scqjgxq35uqYfPa1B9GaEASXFnu1rnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076821260981-mkm407fjkm92hgria5ipguqgm4v11sa6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

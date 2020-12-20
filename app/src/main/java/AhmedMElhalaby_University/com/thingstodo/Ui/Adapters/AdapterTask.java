@@ -1,0 +1,92 @@
+package AhmedMElhalaby_University.com.thingstodo.Ui.Adapters;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import AhmedMElhalaby_University.com.thingstodo.CallBack.OnItemClickListener;
+import AhmedMElhalaby_University.com.thingstodo.Medules.Task;
+import AhmedMElhalaby_University.com.thingstodo.R;
+
+
+public class AdapterTask extends RecyclerView.Adapter<AdapterTask.CustomView> {
+    Context context;
+    List<Task> mylist;
+    private OnItemClickListener listener;
+    int Layout;
+    public static int ItemSelect = -1;
+
+
+    public class CustomView extends RecyclerView.ViewHolder {
+        TextView row_name;
+        CardView card_view;
+        ImageView image_select;
+
+        public CustomView(View v) {
+            super(v);
+            row_name = v.findViewById(R.id.text_name);
+            card_view = v.findViewById(R.id.card_view);
+            image_select = v.findViewById(R.id.image_select);
+        }
+
+    }
+
+    public AdapterTask() {
+    }
+
+    public AdapterTask(Context context, List<Task> mylist, int Layout, OnItemClickListener listener) {
+        this.context = context;
+        this.mylist = mylist;
+        this.listener = listener;
+        this.Layout = Layout;
+    }
+
+    @Override
+    public CustomView onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(Layout, parent, false);
+        CustomView viewholder = new CustomView(view);
+        return viewholder;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public void onBindViewHolder(final CustomView holder, final int position) {
+        holder.row_name.setText(mylist.get(position).getTitle() + "");
+
+        if (mylist.get(position).isSelect()) {
+            holder.image_select.setImageResource(R.drawable.ic_checked);
+        } else {
+            holder.image_select.setImageDrawable(null);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(view, position);
+            }
+        });
+
+
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return mylist.size();
+    }
+
+
+}
+
