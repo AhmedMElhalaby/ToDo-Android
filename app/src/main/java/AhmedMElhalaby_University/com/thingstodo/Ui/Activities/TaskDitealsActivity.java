@@ -45,16 +45,16 @@ public class TaskDitealsActivity extends AppCompatActivity {
         text_date = findViewById(R.id.text_date);
 
 
-        String tast_str = getIntent().getStringExtra("tast_str");
-        if (!TextUtils.isEmpty(tast_str)) {
-            task = new Gson().fromJson(tast_str, Task.class);
+        String str_task = getIntent().getStringExtra("str_task");
+        if (!TextUtils.isEmpty(str_task)) {
+            task = new Gson().fromJson(str_task, Task.class);
             if (task != null) {
                 edittext_title.setText(task.getTitle());
                 edittext_description.setText(task.getDescription());
                 if (task.getCreateDate() != null)
                     text_date.setText(task.getCreateDate());
-                if (task.getCategory() != null)
-                    RootManager.SetColorBackgroundCateogry(getApplicationContext(), text_category, task.getCategory());
+//                if (task.getCategory() != null)
+//                    RootManager.SetColorBackgroundCateogry(getApplicationContext(), text_category, task.getCategory());
 
                 text_bar_action.setText(getResources().getText(R.string.edit));
             } else {

@@ -304,5 +304,46 @@ public class AppDialogManager {
 
     }
 
+    public static void showAddNewTaskDialog(Activity context, InstallTwoStringCallback installCallback) {
+        LayoutInflater inflater = context.getLayoutInflater();
+        View dialoglayout = inflater.inflate(R.layout.dialog_add_task_layout, null);
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(context).create();
+        alertDialogBuilder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        alertDialogBuilder.setView(dialoglayout);
+        EditText edit_dialog_title = dialoglayout.findViewById(R.id.edit_dialog_title);
+        EditText edit_dialog_description = dialoglayout.findViewById(R.id.edit_dialog_description);
+
+        TextView close_dialog = dialoglayout.findViewById(R.id.close_dialog);
+
+        close_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(edit_dialog_title.getText().toString().trim())) {
+                    edit_dialog_title.setError(context.getResources().getString(R.string.required_field));
+                    edit_dialog_title.requestFocus();
+                }else{
+                    String title = edit_dialog_title.getText().toString().trim();
+                    String description = edit_dialog_description.getText().toString().trim();
+                    installCallback.onStatusDone(title, description);
+                    alertDialogBuilder.dismiss();
+                }
+
+            }
+        });
+
+
+        if (!((Activity) context).isFinishing()) {
+            if (context != null)
+                try {
+                    Window window = alertDialogBuilder.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                    alertDialogBuilder.show();
+                } catch (WindowManager.BadTokenException e) {
+                    //use a log message
+                }
+        }
+
+    }
 
 }

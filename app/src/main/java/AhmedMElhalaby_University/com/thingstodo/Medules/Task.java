@@ -1,10 +1,10 @@
 package AhmedMElhalaby_University.com.thingstodo.Medules;
 
 public class Task {
-    private long id ;
+    private String id ;
     private String title ;
     private String description ;
-    private Category category ;
+    private String categoryId ;
     private String createDate ;
     private boolean IsSelect = false ;
     private String userId ;
@@ -12,25 +12,26 @@ public class Task {
     public Task() {
     }
 
-    public Task(long id, String title, String description) {
+    public Task(String id, String title, String description, String categoryId) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.categoryId = categoryId;
     }
 
-    public Task(long id, String title, String description, Category category, String createDate) {
+    public Task(String id, String title, String description, String categoryId, String createDate) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.category = category;
+        this.categoryId = categoryId;
         this.createDate = createDate;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -50,12 +51,12 @@ public class Task {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCreateDate() {

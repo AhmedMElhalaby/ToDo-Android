@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -22,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import AhmedMElhalaby_University.com.thingstodo.Medules.User;
 import AhmedMElhalaby_University.com.thingstodo.R;
@@ -31,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private TextView text_login;
     private EditText edittext_name, edittext_email, edittext_password;
     private Button btn_action;
-
+    private FirebaseAuth mAuth;
 
     FirebaseFirestore db;
     CollectionReference ref;
@@ -40,9 +45,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
         initSetUp();
     }
 
+    private void updateUI(FirebaseUser currentUser) {
+        if(currentUser != null){
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
+        }
+    }
     private void initSetUp() {
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
@@ -102,9 +116,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStop() {
         super.onStop();
-        if (eventListener != null) {
-            eventListener.remove();
-        }
     }
 
     private void CreateNewAccount() {
@@ -130,27 +141,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             edittext_email.setError(getResources().getString(R.string.invalid_Email_address));
             edittext_email.requestFocus();
         } else {
-
-            if (eventListener != null) {
-                eventListener.remove();
-            }
-            User user = new User(name, email, password);
-            eventListener = ref.whereEqualTo("email", user.getEmail())
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-
-                            if (documentSnapshots.size() > 0) {
-                                Toast.makeText(RegisterActivity.this, getResources().getText(R.string.mail_exists), Toast.LENGTH_SHORT).show();
-                            } else {
-                                AddFireBaseNewUser(user);
-
-                            }
-
-                            eventListener.remove();
+            User app_user = new User(name, email, password);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseAuth.getInstance().signOut();
+                            AddFireBaseNewUser(app_user);
+//                            updateUI(user);
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
                         }
-                    });
-
+                    }
+                });
         }
     }
 

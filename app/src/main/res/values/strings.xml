@@ -13,6 +13,8 @@
     <string name="forget_your_password">Forget yout password ?</string>
     <string name="search">Searck</string>
     <string name="lists">"Lists : "</string>
+    <string name="categories">"Categories : "</string>
+    <string name="create_new_category_here">Create new Category here</string>
     <string name="create_new_list_here">Create new List here</string>
     <string name="task">Task</string>
     <string name="delete">Delete</string>
@@ -37,4 +39,5 @@
     <string name="required_field">required_field</string>
     <string name="create_new_list">Create New List</string>
     <string name="Cateogry_exists">This Category Name Exists</string>
+    <string name="Enter_Description">Enter Description</string>
 </resources>

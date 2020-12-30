@@ -1,7 +1,7 @@
 package AhmedMElhalaby_University.com.thingstodo.Ui.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,8 +18,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.List;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import AhmedMElhalaby_University.com.thingstodo.Medules.User;
 import AhmedMElhalaby_University.com.thingstodo.R;
@@ -30,6 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView text_register;
     private EditText edittext_email, edittext_password;
     private Button btn_action;
+    private FirebaseAuth mAuth;
 
     FirebaseFirestore db;
     CollectionReference ref;
@@ -37,8 +42,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
         setContentView(R.layout.activity_login);
         initSetUp();
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+        if(currentUser != null){
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void initSetUp() {
@@ -48,7 +63,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btn_action = findViewById(R.id.btn_action);
         db = FirebaseFirestore.getInstance();
         ref = db.collection("Users::").document("List").collection("AllUsers");
-
         btn_action.setOnClickListener(this::onClick);
         text_register.setOnClickListener(this::onClick);
     }
@@ -87,40 +101,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             edittext_email.setError(getResources().getString(R.string.invalid_Email_address));
             edittext_email.requestFocus();
         } else {
-
-            if (eventListener != null) {
-                eventListener.remove();
-            }
-            User user = new User(email, password);
-
-            eventListener = ref.whereEqualTo("email", user.getEmail()).whereEqualTo("password", user.getPassword())
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                            if (documentSnapshots.size() > 0) {
-                                Toast.makeText(LoginActivity.this, getResources().getText(R.string.mail_exists), Toast.LENGTH_SHORT).show();
-
-                                List<User> data = documentSnapshots.toObjects(User.class);
-                                if (data.size() > 0) {
-                                    for (DocumentChange documentChange : documentSnapshots.getDocumentChanges()) {
-                                        String id = documentChange.getDocument().getString("id");
-                                        Toast.makeText(LoginActivity.this, " Welcome " + id, Toast.LENGTH_SHORT).show();
-
-                                    }
-                                    AppUserPreferences.SetUser(LoginActivity.this, data.get(0));
-                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                    startActivity(intent);
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (eventListener != null) {
+                                    eventListener.remove();
                                 }
+                                User user_app = new User(email, password);
+                                eventListener = ref.whereEqualTo("email", user_app.getEmail()).whereEqualTo("password", user_app.getPassword())
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                                        if (documentSnapshots.size() > 0) {
+                                            Toast.makeText(LoginActivity.this, getResources().getText(R.string.mail_exists), Toast.LENGTH_SHORT).show();
 
+                                            List<User> data = documentSnapshots.toObjects(User.class);
+                                            if (data.size() > 0) {
+                                                for (DocumentChange documentChange : documentSnapshots.getDocumentChanges()) {
+                                                    String id = documentChange.getDocument().getString("id");
+                                                    Toast.makeText(LoginActivity.this, " Welcome " + id, Toast.LENGTH_SHORT).show();
+                                                }
+                                                AppUserPreferences.SetUser(LoginActivity.this, data.get(0));
+                                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, getResources().getText(R.string.mail_not_exists), Toast.LENGTH_SHORT).show();
+                                        }
+                                        eventListener.remove();
+                                    }
+                                });
+                                updateUI(user);
                             } else {
-                                Toast.makeText(LoginActivity.this, getResources().getText(R.string.mail_not_exists), Toast.LENGTH_SHORT).show();
-
+                                Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                                updateUI(null);
                             }
 
-                            eventListener.remove();
                         }
                     });
-
         }
 
 
